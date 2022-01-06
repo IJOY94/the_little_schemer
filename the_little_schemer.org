@@ -18,6 +18,15 @@ Assumed Definitions:
     (lambda (x)
       (- x 1)))
   #+end_src
+- lat?
+  #+begin_src scheme
+  (define lat?
+    (lambda (l)
+      (cond
+       ((null? l) #t)
+       ((atom? (car l)) (lat? (cdr l)))
+       (else #f))))
+  #+end_src
 * Ten Commandments
 1. When recurring on a list of atoms, /lat/, ask two questions about it: (/null? lat/) and *else*.
    When recurring on a number, /n/, ask two questions about it: (/zero? n/) and *else*.
@@ -44,21 +53,47 @@ The primitive /car/ is defined only for non-empty lists
 ** The Law of /Cdr/
 The primitive /cdr/ is defined only for non-empty lists.
 The /cdr/ of any non-empty list is always another list.
+** The Law of /Cons/
+The primitive /cons/ takes two arguments.
+The second agrument to /cons/ must be a list.
+The result is a list.
+** The Law of /Null/
+The primitive /null?/ is defined only for lists.
+** The Law of /Eq?/
+The primitive /eq?/ takes two arguments; each must be a non-numeric atom.
 * First Chapter
-- Atom
-  An atom is any single non-list unit
-  All Atoms are S-Expressions
-- List
-  All lists are S-Expressions
-  Lists must be enclosed by parentheses
-  Lists are composed of other S-expressions
-- S-Expressions
-  All Atoms are S-Expressions
-  All lists are S-Expressions?
-- ()
-  This is the empty list
-  Is a list, not an atom
-- Car
-  Takes the first element of a list
-  You cannot ask for the /car/ of an atom; an atom is not a list
-  You cannot ask for the /car/ of a list
+** Atom
+An atom is any single non-list unit
+All Atoms are S-Expressions
+** List
+All lists are S-Expressions
+Lists must be enclosed by parentheses
+Lists are composed of other S-expressions
+** S-Expressions
+All Atoms are S-Expressions
+All lists are S-Expressions?
+** ()
+This is the empty list
+Is a list, not an atom
+** Car
+Takes the first element of a list
+You cannot ask for the /car/ of an atom; an atom is not a list
+Can be called on any non-empty list
+** Cdr
+Cannot take an atom as an agrument ([[The Law of /Cdr/][See the Law of Cdr]])
+Can be called on any non-empty list
+** Cons
+Used to build lists
+Takes an S-Expression and a List as an agrument
+** Null?
+True for an empty (null) list
+You cannot ask /null?/ of an atom (In practice, /null?/ returnse false for all but the empty list)
+** Atom?
+False for any list, including the empty one
+Takes a single argument in the form of any S-expression
+** Eq?
+Just another way to ask, "Are atoms a1 and a2 the same non-numeric atom?"
+Essentially a pointer comparison
+Takes two arguments, both of which must be non-numeric atoms
+** Lat?
+/lat?/ is recursively defined to look at the first S-expression of a list. If the /car/ of the list is an atom, it calls itself on the /cdr/ of the list. So long as each member of the list is an atom, eventually the function will recurse to the point that it is passed the empty list, which returns true. If at any point the /car/ of the list is not an atom, the function will return false.
