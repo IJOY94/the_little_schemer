@@ -27,6 +27,15 @@ Assumed Definitions:
        ((atom? (car l)) (lat? (cdr l)))
        (else #f))))
   #+end_src
+- member?
+  #+begin_src scheme
+  (define member?
+    (lambda (a lat)
+      (cond
+        ((null? lat) #f)
+        (else (or (eq? (car lat) a)
+                  (member? a (cdr lat)))))))
+  #+end_src
 * Ten Commandments
 1. When recurring on a list of atoms, /lat/, ask two questions about it: (/null? lat/) and *else*.
    When recurring on a number, /n/, ask two questions about it: (/zero? n/) and *else*.
@@ -95,5 +104,9 @@ Takes a single argument in the form of any S-expression
 Just another way to ask, "Are atoms a1 and a2 the same non-numeric atom?"
 Essentially a pointer comparison
 Takes two arguments, both of which must be non-numeric atoms
+* Second Chapter
 ** Lat?
 /lat?/ is recursively defined to look at the first S-expression of a list. If the /car/ of the list is an atom, it calls itself on the /cdr/ of the list. So long as each member of the list is an atom, eventually the function will recurse to the point that it is passed the empty list, which returns true. If at any point the /car/ of the list is not an atom, the function will return false.
+** Or
+/or/ asks two questions, one at a time. If the first is true, it stops and answers true. Otherwise, it askes the second question and answers with whatever the second question answers.
+** Member?
